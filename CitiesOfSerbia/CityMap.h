@@ -2,7 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
-#include <vector>
+
 #include "City.h"
 
 using namespace std;
@@ -11,7 +11,8 @@ const int MAP_WIDTH = 29;
 const int MAP_HEIGHT = 43;
 const int OUT = 27;
 const int GRASS = 28;
-const int ROAD = 29;
+const int ROUTE = 29;
+const int CURRENT_ROUTE = 30;
 
 class CityMap : public sf::Drawable, public sf::Transformable
 {

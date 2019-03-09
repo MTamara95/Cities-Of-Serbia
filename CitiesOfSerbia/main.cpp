@@ -1,63 +1,26 @@
 #include "CityMap.h"
 #include "City.h"
-
-using namespace std;
+#include "Route.h"
 
 const int INF = 9999;
-
-void PickFromAndToCity(int* numOfChosenCities, sf::Event event, int *firstCity, int *secondCity) {
-	vector<string> allCities = City::GetAllCities();
-
-	if ((*numOfChosenCities) == 0) {
-		if (event.type == sf::Event::MouseButtonPressed) {
-			*firstCity = City::DetectChosenCity(event.mouseButton.x, event.mouseButton.y);
-			if (*firstCity < TOTAL_NUM_OF_CITIES) {
-				cout << "From: " << allCities[*firstCity] << " (" << *firstCity + 1 << ")" << endl;
-				(*numOfChosenCities)++;
-			}
-		}
-	}
-	else if ((*numOfChosenCities) == 1) {
-		if (event.type == sf::Event::MouseButtonPressed) {
-			*secondCity = City::DetectChosenCity(event.mouseButton.x, event.mouseButton.y);
-			if (*secondCity < TOTAL_NUM_OF_CITIES) {
-				cout << "To: " << allCities[*secondCity] << " (" << *secondCity + 1 << ")" << endl;
-				(*numOfChosenCities)++;
-			}
-		}
-	}
-}
+const string TILESET_FILE_NAME = "tileset.png";
 
 vector<int> dijkstra(int startnode, int endnode)
 {
-	int G[TOTAL_NUM_OF_CITIES][TOTAL_NUM_OF_CITIES] = {{0, 58, 0, 65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-													   {58, 0, 0, 52, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-													   {0, 0, 0, 0, 56, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-													   {65, 52, 0, 0, 0, 43, 0, 120, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-													   {0, 0, 56, 0, 0, 48, 93, 0, 82, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-													   {0, 0, 0, 43, 48, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-													   {0, 0, 0, 0, 93, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-													   {0, 0, 0, 120, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-													   {0, 0, 0, 0, 82, 0, 0, 0, 0, 77, 80, 0, 0, 0, 141, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-													   {0, 0, 0, 0, 0, 0, 0, 0, 77, 0, 0, 67, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-													   {0, 0, 0, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 95, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-													   {0, 0, 0, 0, 0, 0, 0, 0, 0, 67, 0, 0, 0, 0, 0, 0, 93, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-													   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 56, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-													   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 95, 0, 0, 0, 0, 114, 0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0},
-													   {0, 0, 0, 0, 0, 0, 0, 0, 141, 0, 0, 0, 0, 0, 0, 0, 55, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-													   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 56, 114, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-													   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 93, 0, 0, 55, 0, 0, 39, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-													   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 39, 0, 61, 0, 0, 0, 102, 0, 0, 0, 0},
-													   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 0, 0, 0, 61, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-													   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 70, 55, 0, 0, 0, 0, 0},
-													   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 70, 0, 0, 0, 0, 0, 0, 0},
-													   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 55, 0, 0, 0, 0, 0, 69, 0},
-													   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 102, 0, 0, 0, 0, 0, 44, 0, 0, 0},
-													   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 44, 0, 40, 0, 0},
-													   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 40, 0, 62, 84},
-													   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 69, 0, 0, 62, 0, 0},
-													   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 84, 0, 0}
-	};
+	int G[TOTAL_NUM_OF_CITIES][TOTAL_NUM_OF_CITIES];
+	
+	// creating matrix representation of graph:
+	for (int i = 0; i < TOTAL_NUM_OF_CITIES; i++) {
+		for (int j = 0; j < TOTAL_NUM_OF_CITIES; j++) {
+			G[i][j] = 0;
+		}
+	}
+	vector<Route> allRoutes = Route::GetAllRoutes();
+	for (Route route : allRoutes) {
+		G[route.GetFromCity()][route.GetToCity()] = route.GetRouteWeight();
+		G[route.GetToCity()][route.GetFromCity()] = route.GetRouteWeight(); // non oriented graph - values of routes wight are symmetric in matrix
+	}
+
 	int cost[TOTAL_NUM_OF_CITIES][TOTAL_NUM_OF_CITIES];
 	int i, j;
 
@@ -111,18 +74,17 @@ vector<int> dijkstra(int startnode, int endnode)
 		count++;
 	}
 
-	//print the path and distance from startnode to endnode
+	//detecting the distance and route from startnode to endnode
 	vector<int> res;
 
 	vector<string> allCities = City::GetAllCities();
-	cout << "Shortest distance between " << allCities[startnode] << " and " << allCities[endnode] << " is " << distance[endnode] << " km." << endl;
-	cout << "Shortest path: " << flush;
-	res.push_back(endnode+1); //cout << endnode << flush;
+	cout << "Shortest distance between " << allCities[startnode] << " and " << allCities[endnode] << " is " << distance[endnode] << " km." << flush;
+	res.push_back(endnode);
 
 	j = endnode;
 	while (j != startnode) {
 		j = pred[j];
-		res.push_back(j+1); // cout << " <- " << j;
+		res.push_back(j);
 	}
 
 	return res;
@@ -134,13 +96,19 @@ int main()
 	vector<vector<int>> level = CityMap::GetCityMap();
 
 	// forming a map from tiles in the picture "tileset.png":
-	if (!map.load("tileset.png", level))
+	if (!map.load(TILESET_FILE_NAME, level))
 		return -1;
 
 	sf::RenderWindow window(sf::VideoMode(CITY_SIZE*MAP_WIDTH, CITY_SIZE*MAP_HEIGHT), "Cities in Serbia");
 	int numOfChosenCities = 0;
 	int firstCity = 0, secondCity = 0;
 	cout << "Choose two cities:" << endl;
+	vector<string> allCities = City::GetAllCities();
+	for (int i = 0; i < TOTAL_NUM_OF_CITIES; i++) {
+		cout << i + 1 << ". " << allCities[i] << endl;
+	}
+	cout << endl;
+
 	// displaying window:
 	while (window.isOpen())
 	{
@@ -150,14 +118,27 @@ int main()
 		{
 			// input - user chooses two cities:
 			if (numOfChosenCities < 2) {
-				PickFromAndToCity(&numOfChosenCities, event, &firstCity, &secondCity);
+				City::PickFromAndToCity(&numOfChosenCities, event, &firstCity, &secondCity);
 			}
 
 			// calling function for detect a shortest distance from one to another city:
 			if (numOfChosenCities == 2) {
-				for (int el : dijkstra(firstCity, secondCity)) {
-					cout << el << " <- " << flush;
+				vector<int> resultSetOfRoutes = dijkstra(firstCity, secondCity);
+				vector<Route> allRoutes = Route::GetAllRoutes();
+				for (int i = 0; i < resultSetOfRoutes.size()-1; i++) {
+					vector<pair<int, int>> currentPartOfRoute;
+					for (int j = 0; j < allRoutes.size(); j++) {
+						if ((resultSetOfRoutes[i] == allRoutes[j].GetFromCity() && resultSetOfRoutes[i + 1] == allRoutes[j].GetToCity()) ||
+							(resultSetOfRoutes[i] == allRoutes[j].GetToCity() && resultSetOfRoutes[i + 1] == allRoutes[j].GetFromCity())) {
+							currentPartOfRoute = allRoutes[j].GetRouteFields();
+							break;
+						}
+					}
+					for (int k = 0; k < currentPartOfRoute.size(); k++) {
+						level[currentPartOfRoute[k].first][currentPartOfRoute[k].second] = CURRENT_ROUTE;
+					}
 				}
+				map.load(TILESET_FILE_NAME, level);
 				numOfChosenCities++;
 			}
 
