@@ -78,7 +78,7 @@ vector<int> dijkstra(int startnode, int endnode)
 	vector<int> res;
 
 	vector<string> allCities = City::GetAllCities();
-	cout << "Shortest distance between " << allCities[startnode] << " and " << allCities[endnode] << " is " << distance[endnode] << " km." << flush;
+	cout << "Shortest distance between " << allCities[startnode] << " and " << allCities[endnode] << " is " << distance[endnode] << " km." << endl;
 	res.push_back(endnode);
 
 	j = endnode;
@@ -107,7 +107,6 @@ int main()
 	for (int i = 0; i < TOTAL_NUM_OF_CITIES; i++) {
 		cout << i + 1 << ". " << allCities[i] << endl;
 	}
-	cout << endl;
 
 	// displaying window:
 	while (window.isOpen())
@@ -118,7 +117,7 @@ int main()
 		{
 			// input - user chooses two cities:
 			if (numOfChosenCities < 2) {
-				City::PickFromAndToCity(&numOfChosenCities, event, &firstCity, &secondCity);
+				City::PickFromAndToCity(&numOfChosenCities, event, &firstCity, &secondCity, &map, window);
 			}
 
 			// calling function for detect a shortest distance from one to another city:
@@ -139,7 +138,8 @@ int main()
 					}
 				}
 				map.load(TILESET_FILE_NAME, level);
-				numOfChosenCities++;
+				numOfChosenCities = 0;
+				level = CityMap::GetCityMap();
 			}
 
 			// closing the window
@@ -150,6 +150,7 @@ int main()
 		window.clear();
 		window.draw(map);
 		window.display();
+
 	}
 
 	return 0;

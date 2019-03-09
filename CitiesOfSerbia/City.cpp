@@ -11,6 +11,14 @@ int City::DetectChosenCity(int x, int y) {
 	int k = 0;
 	vector<vector<int>> level = CityMap::GetCityMap();
 
+	// detecting chosen city:
+
+	// pixelTopLeftX := j*CITY_SIZE
+	// pixelTopLeftY := i*CITY_SIZE
+	// (x, y) - coordinates of a chosen pixel; (pixelTopLeftX, pixelTopLeftY) - coordinates of pixel value of city which is on level[i][j] position
+
+	// we checking if (x, y) belongs to a square with TopLeftCoordinates (pixelTopLeftX, pixelTopLeftY):
+	// (pixelTopLeftX, pixelTopLeftY+CITY_SIZE), (pixelTopLeftX+CITY_SIZE, pixelTopLeftY+CITY_SIZE), (pixelTopLeftX+CITY_SIZE, pixelTopLeftY), (pixelTopLeftX, pixelTopLeftY)
 	for (int i = 0; i < MAP_HEIGHT; i++) {
 		for (int j = 0; j < MAP_WIDTH; j++) {
 			k = level[i][j];
@@ -21,14 +29,19 @@ int City::DetectChosenCity(int x, int y) {
 	}
 }
 
-void City::PickFromAndToCity(int* numOfChosenCities, sf::Event event, int *firstCity, int *secondCity) {
+void City::PickFromAndToCity(int* numOfChosenCities, sf::Event event, int *firstCity, int *secondCity, CityMap *map, sf::RenderWindow& window) {
 	vector<string> allCities = City::GetAllCities();
 
 	if ((*numOfChosenCities) == 0) {
 		if (event.type == sf::Event::MouseButtonPressed) {
 			*firstCity = City::DetectChosenCity(event.mouseButton.x, event.mouseButton.y);
 			if (*firstCity < TOTAL_NUM_OF_CITIES) {
-				cout << "From: " << allCities[*firstCity] << " (" << *firstCity + 1 << ")" << endl;
+				vector<vector<int>> level = CityMap::GetCityMap();
+				map->load("tileset.png", level);
+				cout << "\nFrom: " << allCities[*firstCity] << " (" << *firstCity + 1 << ")" << endl;
+				window.clear();
+				window.draw(*map);
+				window.display();
 				(*numOfChosenCities)++;
 			}
 		}

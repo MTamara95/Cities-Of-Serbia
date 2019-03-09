@@ -15,7 +15,7 @@ public:
 	vector<pair<int, int>> GetRouteFields();
 
 	static vector<Route> GetAllRoutes();
-
+	
 private:
 	int _fromCity;
 	int _toCity;
