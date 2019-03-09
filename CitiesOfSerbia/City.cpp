@@ -36,23 +36,33 @@ void City::PickFromAndToCity(int* numOfChosenCities, sf::Event event, int *first
 		if (event.type == sf::Event::MouseButtonPressed) {
 			*firstCity = City::DetectChosenCity(event.mouseButton.x, event.mouseButton.y);
 			if (*firstCity < TOTAL_NUM_OF_CITIES) {
+				(*numOfChosenCities)++;
+				// restart previous current route:
 				vector<vector<int>> level = CityMap::GetCityMap();
 				map->load("tileset.png", level);
 				cout << "\nFrom: " << allCities[*firstCity] << " (" << *firstCity + 1 << ")" << endl;
 				window.clear();
 				window.draw(*map);
 				window.display();
-				(*numOfChosenCities)++;
 			}
 		}
 	}
 	else if ((*numOfChosenCities) == 1) {
-		if (event.type == sf::Event::MouseButtonPressed) {
-			*secondCity = City::DetectChosenCity(event.mouseButton.x, event.mouseButton.y);
-			if (*secondCity < TOTAL_NUM_OF_CITIES) {
-				cout << "To: " << allCities[*secondCity] << " (" << *secondCity + 1 << ")" << endl;
-				(*numOfChosenCities)++;
+		while (true) {
+			window.pollEvent(event);
+			if (event.type == sf::Event::MouseButtonPressed) {
+				*secondCity = City::DetectChosenCity(event.mouseButton.x, event.mouseButton.y);
+				// disable user to choose two same cities:
+				if (*firstCity == *secondCity) {
+					continue;
+				}
+				if (*secondCity < TOTAL_NUM_OF_CITIES) {
+					cout << "To: " << allCities[*secondCity] << " (" << *secondCity + 1 << ")" << endl;
+					(*numOfChosenCities)++;
+				}
 			}
+			break;
 		}
+		
 	}
 }
