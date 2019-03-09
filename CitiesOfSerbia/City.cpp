@@ -1,15 +1,15 @@
 #include "City.h"
 
-vector<string> City::GetAllCities() {
+vector<string> City::getAllCities() {
 	vector<string> allCities = { "Subotica", "Sombor", "Kikinda", "Vrbas", "Zrenjanin", "Novi Sad", "Vrsac", "Sid", "Beograd", "Sabac",  "Pozarevac", "Valjevo", "Negotin", "Jagodina",
 								 "Kragujevac", "Zajecar", "Cacak", "Kraljevo", "Krusevac", "Nis", "Pirot", "Leskovac", "Novi Pazar", "Kosovska Mitrovica", "Pristina", "Vranje", "Prizren" };
 
 	return allCities;
 }
 
-int City::DetectChosenCity(int x, int y) {
+int City::detectChosenCity(int x, int y) {
 	int k = 0;
-	vector<vector<int>> level = CityMap::GetCityMap();
+	vector<vector<int>> level = CityMap::getCityMap();
 
 	// detecting chosen city:
 
@@ -29,16 +29,16 @@ int City::DetectChosenCity(int x, int y) {
 	}
 }
 
-void City::PickFromAndToCity(int* numOfChosenCities, sf::Event event, int *firstCity, int *secondCity, CityMap *map, sf::RenderWindow& window) {
-	vector<string> allCities = City::GetAllCities();
+void City::pickFromAndToCity(int* numOfChosenCities, sf::Event event, int *firstCity, int *secondCity, CityMap *map, sf::RenderWindow& window) {
+	vector<string> allCities = City::getAllCities();
 
 	if ((*numOfChosenCities) == 0) {
 		if (event.type == sf::Event::MouseButtonPressed) {
-			*firstCity = City::DetectChosenCity(event.mouseButton.x, event.mouseButton.y);
+			*firstCity = City::detectChosenCity(event.mouseButton.x, event.mouseButton.y);
 			if (*firstCity < TOTAL_NUM_OF_CITIES) {
 				(*numOfChosenCities)++;
 				// restart previous current route:
-				vector<vector<int>> level = CityMap::GetCityMap();
+				vector<vector<int>> level = CityMap::getCityMap();
 				map->load("tileset.png", level);
 				cout << "\nFrom: " << allCities[*firstCity] << " (" << *firstCity + 1 << ")" << endl;
 				window.clear();
@@ -51,7 +51,7 @@ void City::PickFromAndToCity(int* numOfChosenCities, sf::Event event, int *first
 		while (true) {
 			window.pollEvent(event);
 			if (event.type == sf::Event::MouseButtonPressed) {
-				*secondCity = City::DetectChosenCity(event.mouseButton.x, event.mouseButton.y);
+				*secondCity = City::detectChosenCity(event.mouseButton.x, event.mouseButton.y);
 				// disable user to choose two same cities:
 				if (*firstCity == *secondCity) {
 					continue;

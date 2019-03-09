@@ -16,7 +16,7 @@ class CityMap;
 class City
 {
 public:
-	static vector<string> GetAllCities();
-	static int DetectChosenCity(int x, int y);
-	static void PickFromAndToCity(int* numOfChosenCities, sf::Event event, int *firstCity, int *secondCity, CityMap *map, sf::RenderWindow& window);
+	static vector<string> getAllCities();
+	static int detectChosenCity(int x, int y);
+	static void pickFromAndToCity(int* numOfChosenCities, sf::Event event, int *firstCity, int *secondCity, CityMap *map, sf::RenderWindow& window);
 };

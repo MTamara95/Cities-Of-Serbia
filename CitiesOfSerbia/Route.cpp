@@ -14,23 +14,23 @@ Route::~Route()
 }
 
 
-int Route::GetFromCity() {
+int Route::getFromCity() {
 	return _fromCity;
 }
 
-int Route::GetToCity() {
+int Route::getToCity() {
 	return _toCity;
 }
 
-int Route::GetRouteWeight() {
+int Route::getRouteWeight() {
 	return _routeWeight;
 }
 
-vector<pair<int, int>> Route::GetRouteFields() {
+vector<pair<int, int>> Route::getRouteFields() {
 	return _routeFields;
 }
 
-vector<Route> Route::GetAllRoutes() {
+vector<Route> Route::getAllRoutes() {
 		vector<Route> allRoutes = { Route(0, 1, 58, {make_pair(4,3), make_pair(3,4)}),
 									Route(0, 3, 65, {make_pair(3,5), make_pair(4,5), make_pair(5,5), make_pair(6,5), make_pair(7,5)}),
 									Route(1, 3, 52, {make_pair(6,3), make_pair(7,4)}),

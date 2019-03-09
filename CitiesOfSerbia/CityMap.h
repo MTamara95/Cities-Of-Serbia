@@ -18,11 +18,11 @@ class CityMap : public sf::Drawable, public sf::Transformable
 {
 public:
 	bool load(const std::string& tileset, vector<vector<int>> tiles);
-	static vector<vector<int>> GetCityMap();
+	static vector<vector<int>> getCityMap();
 
 private:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-	sf::VertexArray m_vertices;
-	sf::Texture m_tileset;
+	sf::VertexArray _vertices;
+	sf::Texture _tileset;
 };

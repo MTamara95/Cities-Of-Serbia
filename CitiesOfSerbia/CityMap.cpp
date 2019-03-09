@@ -2,19 +2,19 @@
 
 bool CityMap::load(const std::string& tileset, vector<vector<int>> tiles)
 {
-	if (!m_tileset.loadFromFile(tileset))
+	if (!_tileset.loadFromFile(tileset))
 		return false;
 
 	// resize the vertex array to fit the level size
-	m_vertices.setPrimitiveType(sf::Quads);
-	m_vertices.resize(MAP_WIDTH * MAP_HEIGHT * 4);
+	_vertices.setPrimitiveType(sf::Quads);
+	_vertices.resize(MAP_WIDTH * MAP_HEIGHT * 4);
 
 	// populate the vertex array, with one quad per tile
 	for (int i = 0; i < MAP_HEIGHT; i++){
 		for (int j = 0; j < MAP_WIDTH; j++)
 		{
 			// get a pointer to the current tile's quad (2D array -> 1D array)
-			sf::Vertex* quad = &m_vertices[4*(MAP_WIDTH*i+j)];
+			sf::Vertex* quad = &_vertices[4*(MAP_WIDTH*i+j)];
 
 			// define its 4 corners
 			quad[0].position = sf::Vector2f(j * CITY_SIZE, (i+1) * CITY_SIZE);
@@ -34,7 +34,7 @@ bool CityMap::load(const std::string& tileset, vector<vector<int>> tiles)
 	return true;
 }
 
-vector<vector<int>> CityMap::GetCityMap() {
+vector<vector<int>> CityMap::getCityMap() {
 	vector<vector<int>> level = { {  OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT, OUT},
 								  {  OUT,   OUT,   OUT,   OUT,   OUT, GRASS, GRASS,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT, OUT},
 								  {  OUT,   OUT,   OUT,   OUT, GRASS,    00, GRASS, GRASS, GRASS,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT,   OUT, OUT},
@@ -85,8 +85,8 @@ vector<vector<int>> CityMap::GetCityMap() {
 void CityMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	// apply the texture
-	states.texture = &m_tileset;
+	states.texture = &_tileset;
 
 	// draw the vertex array
-	target.draw(m_vertices, states);
+	target.draw(_vertices, states);
 }

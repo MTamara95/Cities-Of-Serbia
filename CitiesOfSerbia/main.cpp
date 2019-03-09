@@ -15,10 +15,10 @@ vector<int> dijkstra(int startnode, int endnode)
 			G[i][j] = 0;
 		}
 	}
-	vector<Route> allRoutes = Route::GetAllRoutes();
+	vector<Route> allRoutes = Route::getAllRoutes();
 	for (Route route : allRoutes) {
-		G[route.GetFromCity()][route.GetToCity()] = route.GetRouteWeight();
-		G[route.GetToCity()][route.GetFromCity()] = route.GetRouteWeight(); // non oriented graph - values of routes wight are symmetric in matrix
+		G[route.getFromCity()][route.getToCity()] = route.getRouteWeight();
+		G[route.getToCity()][route.getFromCity()] = route.getRouteWeight(); // non oriented graph - values of routes wight are symmetric in matrix
 	}
 
 	int cost[TOTAL_NUM_OF_CITIES][TOTAL_NUM_OF_CITIES];
@@ -77,7 +77,7 @@ vector<int> dijkstra(int startnode, int endnode)
 	//detecting the distance and route from startnode to endnode
 	vector<int> res;
 
-	vector<string> allCities = City::GetAllCities();
+	vector<string> allCities = City::getAllCities();
 	cout << "Shortest distance between " << allCities[startnode] << " and " << allCities[endnode] << " is " << distance[endnode] << " km." << endl;
 	res.push_back(endnode);
 
@@ -93,7 +93,7 @@ vector<int> dijkstra(int startnode, int endnode)
 int main()
 {
 	CityMap map;
-	vector<vector<int>> level = CityMap::GetCityMap();
+	vector<vector<int>> level = CityMap::getCityMap();
 
 	// forming a map from tiles in the picture "tileset.png":
 	if (!map.load(TILESET_FILE_NAME, level))
@@ -103,7 +103,7 @@ int main()
 	int numOfChosenCities = 0;
 	int firstCity = 0, secondCity = 0;
 	cout << "Choose two cities:" << endl;
-	vector<string> allCities = City::GetAllCities();
+	vector<string> allCities = City::getAllCities();
 	for (int i = 0; i < TOTAL_NUM_OF_CITIES; i++) {
 		cout << i + 1 << ". " << allCities[i] << endl;
 	}
@@ -117,19 +117,19 @@ int main()
 		{
 			// input - user chooses two cities:
 			if (numOfChosenCities < 2) {
-				City::PickFromAndToCity(&numOfChosenCities, event, &firstCity, &secondCity, &map, window);
+				City::pickFromAndToCity(&numOfChosenCities, event, &firstCity, &secondCity, &map, window);
 			}
 
 			// calling function for detect a shortest distance from one to another city:
 			if (numOfChosenCities == 2) {
 				vector<int> resultSetOfRoutes = dijkstra(firstCity, secondCity);
-				vector<Route> allRoutes = Route::GetAllRoutes();
+				vector<Route> allRoutes = Route::getAllRoutes();
 				for (int i = 0; i < resultSetOfRoutes.size()-1; i++) {
 					vector<pair<int, int>> currentPartOfRoute;
 					for (int j = 0; j < allRoutes.size(); j++) {
-						if ((resultSetOfRoutes[i] == allRoutes[j].GetFromCity() && resultSetOfRoutes[i + 1] == allRoutes[j].GetToCity()) ||
-							(resultSetOfRoutes[i] == allRoutes[j].GetToCity() && resultSetOfRoutes[i + 1] == allRoutes[j].GetFromCity())) {
-							currentPartOfRoute = allRoutes[j].GetRouteFields();
+						if ((resultSetOfRoutes[i] == allRoutes[j].getFromCity() && resultSetOfRoutes[i + 1] == allRoutes[j].getToCity()) ||
+							(resultSetOfRoutes[i] == allRoutes[j].getToCity() && resultSetOfRoutes[i + 1] == allRoutes[j].getFromCity())) {
+							currentPartOfRoute = allRoutes[j].getRouteFields();
 							break;
 						}
 					}
@@ -139,7 +139,7 @@ int main()
 				}
 				map.load(TILESET_FILE_NAME, level);
 				numOfChosenCities = 0;
-				level = CityMap::GetCityMap();
+				level = CityMap::getCityMap();
 			}
 
 			// closing the window
