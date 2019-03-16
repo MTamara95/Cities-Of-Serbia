@@ -1,18 +1,15 @@
 #include "CityMap.h"
 
-bool CityMap::load(const std::string& tileset, vector<vector<int>> tiles)
-{
-	if (!_tileset.loadFromFile(tileset))
-		return false;
+bool CityMap::load(const std::string& tileset, vector<vector<int>> tiles) {
+	_tileset.loadFromFile(tileset);
 
 	// resize the vertex array to fit the level size
 	_vertices.setPrimitiveType(sf::Quads);
 	_vertices.resize(MAP_WIDTH * MAP_HEIGHT * 4);
 
 	// populate the vertex array, with one quad per tile
-	for (int i = 0; i < MAP_HEIGHT; i++){
-		for (int j = 0; j < MAP_WIDTH; j++)
-		{
+	for (int i = 0; i < MAP_HEIGHT; i++) {
+		for (int j = 0; j < MAP_WIDTH; j++) {
 			// get a pointer to the current tile's quad (2D array -> 1D array)
 			sf::Vertex* quad = &_vertices[4*(MAP_WIDTH*i+j)];
 
@@ -82,8 +79,7 @@ vector<vector<int>> CityMap::getCityMap() {
 	return level;
 }
 
-void CityMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{
+void CityMap::draw(sf::RenderTarget& target, sf::RenderStates states) const {
 	// apply the texture
 	states.texture = &_tileset;
 

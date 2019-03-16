@@ -17,6 +17,6 @@ class City
 {
 public:
 	static vector<string> getAllCities();
-	static int detectChosenCity(int x, int y);
+	static int detectChosenCity(int x, int y, sf::RenderWindow& window);
 	static void pickFromAndToCity(int* numOfChosenCities, sf::Event event, int *firstCity, int *secondCity, CityMap *map, sf::RenderWindow& window);
 };

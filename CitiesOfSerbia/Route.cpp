@@ -8,11 +8,9 @@ Route::Route(int fromCity, int toCity, int weight, vector<pair<int, int>> fields
 	_routeFields = fields;
 }
 
-
 Route::~Route()
 {
 }
-
 
 int Route::getFromCity() {
 	return _fromCity;
