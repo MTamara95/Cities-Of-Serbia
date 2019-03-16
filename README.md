@@ -9,4 +9,4 @@ C++ project - making program for determination the shortest path between two cho
 * Release -> Linker -> Input -> AdditionalDependecies: sfml-system.lib, sfml-window.lib, sfml-graphics.lib;
 * also, you need to copy all files from SFML-version\bin to Project\Release).
 
-*Note*: This program is made in educational purposes, for exercising C++ and algorithms, and some of distances are approximated and are not trustworthy.
+*Note*: This program is made for educational purposes, for exercising C++ and algorithms, and some of distances are approximated and are not trustworthy.
