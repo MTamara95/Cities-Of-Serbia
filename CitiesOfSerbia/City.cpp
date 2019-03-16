@@ -7,26 +7,23 @@ vector<string> City::getAllCities() {
 	return allCities;
 }
 
+// detecting chosen city - using the given coordinates:
 int City::detectChosenCity(int x, int y, sf::RenderWindow& window) {
 	int k = 0;
 	vector<vector<int>> level = CityMap::getCityMap();
-
-	// detecting chosen city:
-
-	// pixelTopLeftX := j*CITY_SIZE
-	// pixelTopLeftY := i*CITY_SIZE
-	// (x, y) - coordinates of a chosen pixel; (pixelTopLeftX, pixelTopLeftY) - coordinates of pixel value of city which is on level[i][j] position
-
-	// we checking if (x, y) belongs to a square with TopLeftCoordinates (pixelTopLeftX, pixelTopLeftY):
-	// (pixelTopLeftX, pixelTopLeftY+CITY_SIZE), (pixelTopLeftX+CITY_SIZE, pixelTopLeftY+CITY_SIZE), (pixelTopLeftX+CITY_SIZE, pixelTopLeftY), (pixelTopLeftX, pixelTopLeftY)
 
 	// making the program compatibile with resizing the window:
 	float city_width = 1.0*window.getSize().x / MAP_WIDTH;
 	float city_height = 1.0*window.getSize().y / MAP_HEIGHT;
 
+	// pixelTopLeftX := j*city_width
+	// pixelTopLeftY := i*city_height
+	// (x, y) - coordinates of a chosen pixel; (pixelTopLeftX, pixelTopLeftY) - coordinates of pixel value of city which is on level[i][j] position
+
 	for (int i = 0; i < MAP_HEIGHT; i++) {
 		for (int j = 0; j < MAP_WIDTH; j++) {
 			k = level[i][j];
+			// we are checking if (x, y) belongs to a square with TopLeftCoordinates (pixelTopLeftX, pixelTopLeftY):
 			if (x >= j*city_width && x <= j*city_width + city_width && y >= i*city_height && y <= i*city_height + city_height) {
 				return k;
 			}
@@ -34,9 +31,11 @@ int City::detectChosenCity(int x, int y, sf::RenderWindow& window) {
 	}
 }
 
+// function for checking which two city are chosen:
 void City::pickFromAndToCity(int* numOfChosenCities, sf::Event event, int *firstCity, int *secondCity, CityMap *map, sf::RenderWindow& window) {
 	vector<string> allCities = City::getAllCities();
 
+	// picking the first city:
 	if ((*numOfChosenCities) == 0) {
 		if (event.type == sf::Event::MouseButtonPressed) {
 			*firstCity = City::detectChosenCity(event.mouseButton.x, event.mouseButton.y, window);
@@ -52,6 +51,7 @@ void City::pickFromAndToCity(int* numOfChosenCities, sf::Event event, int *first
 			}
 		}
 	}
+	// picking the second city:
 	else if ((*numOfChosenCities) == 1) {
 		while (true) {
 			window.pollEvent(event);

@@ -1,5 +1,6 @@
 #include "CityMap.h"
 
+// creating the map using picture which path is given in the string "tileset" and positions which are given in the "tiles" variable:
 bool CityMap::load(const std::string& tileset, vector<vector<int>> tiles) {
 	_tileset.loadFromFile(tileset);
 

@@ -103,7 +103,7 @@ void determinePredDistanceAndVisited(int pred[TOTAL_NUM_OF_CITIES], int distance
 
 	distance[startnode] = 0;
 	visited[startnode] = 1;
-	int count = 1; //count gives the number of nodes seen so far
+	int count = 1; // count gives the number of nodes seen so far
 	int mindistance;
 	int nextnode;
 	while (count < TOTAL_NUM_OF_CITIES - 1) {
